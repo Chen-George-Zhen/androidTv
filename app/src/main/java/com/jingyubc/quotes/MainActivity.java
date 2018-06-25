@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -25,11 +24,6 @@ import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,16 +46,16 @@ public class MainActivity extends Activity {
     private String urlTTS = "";
     SharedPreferences sharedPreferences;
 
-    private Handler switchHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    switchWebView();
-                    break;
-            }
-        }
-    };
+//    private Handler switchHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case 0:
+//                    switchWebView();
+//                    break;
+//            }
+//        }
+//    };
 
     /*
      * @param savedInstanceState
@@ -78,8 +72,6 @@ public class MainActivity extends Activity {
         sharedPreferences = getSharedPreferences("setting_url", Context.MODE_PRIVATE);
         relativeLayout = (RelativeLayout)findViewById(R.id.display_logo);
         webView_1 = (BridgeWebView)findViewById(R.id.main_webview);
-        webView_2 = (BridgeWebView)findViewById(R.id.switch_webview);
-        webViewTTS = (BridgeWebView)findViewById(R.id.tts_webview);
 
         url_1 = sharedPreferences.getString("url_one", getResources().getString(R.string.screen_url_1));
 
@@ -88,45 +80,42 @@ public class MainActivity extends Activity {
         }
 
         initWebView(webView_1, url_1);
-        initWebView(webView_2, url_2);
-        initWebView(webViewTTS, urlTTS);
-
         currentWebView = webView_1;
 
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                Message msg = new Message();
-                msg.what = 0;
-                switchHandler.sendMessage(msg);
-            }
-        };
-
-        timer = new Timer();
-        timer.scheduleAtFixedRate(task, 20000, 10000);
+//        TimerTask task = new TimerTask() {
+//            @Override
+//            public void run() {
+//                Message msg = new Message();
+//                msg.what = 0;
+//                switchHandler.sendMessage(msg);
+//            }
+//        };
+//
+//        timer = new Timer();
+//        timer.scheduleAtFixedRate(task, 20000, 10000);
     }
 
-    public void switchWebView() {
-        if (webView_1_isVisible) {
-            if (webView_1_alwaysVisible) {
-                return;
-            }
-            webView_1.setVisibility(View.GONE);
-            webView_2.setVisibility(View.VISIBLE);
-            webView_2.loadUrl(url_2);
-            currentWebView = webView_2;
-            webView_1_isVisible = false;
-        } else {
-            if (webView_2_alwaysVisible) {
-                return;
-            }
-            webView_2.setVisibility(View.GONE);
-            webView_1.setVisibility(View.VISIBLE);
-            webView_1.loadUrl(url_1);
-            currentWebView = webView_1;
-            webView_1_isVisible = true;
-        }
-    }
+//    public void switchWebView() {
+//        if (webView_1_isVisible) {
+//            if (webView_1_alwaysVisible) {
+//                return;
+//            }
+//            webView_1.setVisibility(View.GONE);
+//            webView_2.setVisibility(View.VISIBLE);
+//            webView_2.loadUrl(url_2);
+//            currentWebView = webView_2;
+//            webView_1_isVisible = false;
+//        } else {
+//            if (webView_2_alwaysVisible) {
+//                return;
+//            }
+//            webView_2.setVisibility(View.GONE);
+//            webView_1.setVisibility(View.VISIBLE);
+//            webView_1.loadUrl(url_1);
+//            currentWebView = webView_1;
+//            webView_1_isVisible = true;
+//        }
+//    }
 
     public void initWebView(BridgeWebView webView, String url) {
         webView.setWebViewClient(new MyWebViewClient(webView));
